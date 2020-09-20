@@ -1,7 +1,7 @@
 package com.example.utlis
 
-import org.junit.Test
-import kotlin.test.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 internal class CoordinateTest {
 
@@ -12,7 +12,7 @@ internal class CoordinateTest {
             arrayOf(4, 5, 6),
             arrayOf(7, 8, 9),
         )
-        assertEquals(grid[Coordinate(1,2)], 6)
+        assertEquals(6, grid[Coordinate(1, 2)])
     }
 
     @Test
@@ -23,9 +23,9 @@ internal class CoordinateTest {
             arrayOf(7, 8, 9),
         )
 
-        grid[Coordinate(2,0)] = 42
+        grid[Coordinate(2, 0)] = 42
 
-        assertEquals(grid[2][0], 42)
+        assertEquals(42, grid[2][0])
     }
 }
 

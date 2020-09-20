@@ -2,6 +2,7 @@ package com.example.model
 
 import com.example.controller.WORLD_GRID_COLUMNS_SIZE
 import com.example.controller.WORLD_GRID_ROWS_SIZE
+import com.example.utlis.Coordinate
 import com.example.utlis.Grid
 import com.example.utlis.get
 import com.example.utlis.set
@@ -18,9 +19,18 @@ class World {
             }
         }
 
-    fun addCreature(creature: Creature) {
-        if (creaturesGrid[creature.coordinate] != null) return
+    fun addCreature(creature: Creature): Boolean {
+        if (creaturesGrid[creature.coordinate] != null) return false
         creaturesGrid[creature.coordinate] = creature
-        creatures.add(creature)
+        return creatures.add(creature)
     }
+
+    fun moveCreatureTo(creature: Creature, coordinate: Coordinate): Boolean {
+        if(creaturesGrid[creature.coordinate] != creature) return false
+        if(creaturesGrid[coordinate]!= null) return false
+        creature.coordinate = coordinate
+        return true
+    }
+
+
 }

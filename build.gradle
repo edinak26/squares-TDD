@@ -1,6 +1,6 @@
 plugins {
     id 'application'
-    id 'org.jetbrains.kotlin.jvm' version "1.4.0"
+    id 'org.jetbrains.kotlin.jvm' version "1.4.10"
     id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 group = 'com.test'
@@ -17,12 +17,16 @@ application {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "no.tornado:tornadofx:$tornadofx_version"
-    testImplementation "org.jetbrains.kotlin:kotlin-test-junit"
+    testImplementation("org.junit.jupiter:junit-jupiter:5.6.0")
     javafx {
         version = "11.0.2"
         modules = ['javafx.controls', 'javafx.graphics']
     }
+    test {
+        useJUnitPlatform()
+    }
 }
+
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"

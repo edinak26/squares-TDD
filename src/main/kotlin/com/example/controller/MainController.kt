@@ -1,6 +1,7 @@
 package com.example.controller
 
 import com.example.model.Creature
+import com.example.model.Creature.CreatureFactory
 import com.example.utlis.Coordinate
 import com.example.utlis.Grid
 import com.example.utlis.get
@@ -30,7 +31,7 @@ class MainController : Controller() {
             while (true) {
                 runLater {
                     clearCreature()
-                    val cell = Creature(
+                    val cell = CreatureFactory().creatureBy(
                         Coordinate(
                             Random.nextInt(WORLD_GRID_ROWS_SIZE),
                             Random.nextInt(WORLD_GRID_COLUMNS_SIZE)
