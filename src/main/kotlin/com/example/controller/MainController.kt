@@ -1,10 +1,9 @@
 package com.example.controller
 
-import com.example.model.Cell
+import com.example.model.Creature
 import com.example.utlis.Coordinate
 import com.example.utlis.Grid
 import com.example.utlis.get
-import com.example.view.MainView
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.paint.Color
 import tornadofx.Controller
@@ -30,31 +29,26 @@ class MainController : Controller() {
         runAsync {
             while (true) {
                 runLater {
-                    clearGrid()
-                    val cell = Cell(
+                    clearCreature()
+                    val cell = Creature(
                         Coordinate(
                             Random.nextInt(WORLD_GRID_ROWS_SIZE),
                             Random.nextInt(WORLD_GRID_COLUMNS_SIZE)
-                        ), Color(
-                            Random.nextDouble(),
-                            Random.nextDouble(),
-                            Random.nextDouble(),
-                            Random.nextDouble()
                         )
                     )
-                    drawCell(cell)
+                    drawCreature(cell)
                 }
                 sleep(100)
             }
         }
     }
 
-    private fun drawCells(cells: List<Cell>) = cells.forEach(::drawCell)
+    private fun drawCreatures(creatures: List<Creature>) = creatures.forEach(::drawCreature)
 
-    private fun drawCell(cell: Cell) {
-        rectanglesColorsGrid[cell.coordinate].value = cell.color
+    private fun drawCreature(creature: Creature) {
+        rectanglesColorsGrid[creature.coordinate].value = creature.color
     }
 
-    private fun clearGrid() = rectanglesColorsGrid.forEach { it.forEach { it.value = BACKGROUND_COLOR } }
+    private fun clearCreature() = rectanglesColorsGrid.forEach { it.forEach { it.value = BACKGROUND_COLOR } }
 
 }

@@ -25,18 +25,4 @@ class MainView : View("Hello TornadoFX") {
             }
         }
     }
-
-//        runAsync {
-//            world.create()
-//            while (true) {
-//                runLater {
-//                    clearPixels()
-//                    drawCells(world.cells)
-//                    world.runCycle()
-//                }
-//                sleep(2 +world.cells.size/1000L)
-//            }
-//        }
-//    }
-
 }
