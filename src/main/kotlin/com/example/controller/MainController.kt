@@ -2,7 +2,11 @@ package com.example.controller
 
 import com.example.model.Creature
 import com.example.model.Creature.CreatureFactory
+import com.example.model.World
 import com.example.utlis.Coordinate
+import com.example.utlis.Coordinate.Companion.coordinateOf
+import com.example.utlis.Direction
+import com.example.utlis.Direction.Companion.move
 import com.example.utlis.Grid
 import com.example.utlis.get
 import javafx.beans.property.SimpleObjectProperty
@@ -28,16 +32,21 @@ class MainController : Controller() {
 
     init {
         runAsync {
+            val world = World()
+            val creaturesFactory = CreatureFactory()
+            world.addCreature(creaturesFactory.creatureBy(coordinateOf(50, 50)))
+            world.addCreature(creaturesFactory.creatureBy(coordinateOf(51, 50)))
+            world.addCreature(creaturesFactory.creatureBy(coordinateOf(50, 51)))
+            world.addCreature(creaturesFactory.creatureBy(coordinateOf(51, 51)))
             while (true) {
                 runLater {
                     clearCreature()
-                    val cell = CreatureFactory().creatureBy(
-                        Coordinate(
-                            Random.nextInt(WORLD_GRID_ROWS_SIZE),
-                            Random.nextInt(WORLD_GRID_COLUMNS_SIZE)
-                        )
-                    )
-                    drawCreature(cell)
+                    drawCreatures(world.creatures)
+
+                    world.moveCreatureTo(world.creatures[0], world.creatures[0].coordinate.move(Direction.UP))
+                    world.moveCreatureTo(world.creatures[1], world.creatures[1].coordinate.move(Direction.RIGHT))
+                    world.moveCreatureTo(world.creatures[2], world.creatures[2].coordinate.move(Direction.LEFT))
+                    world.moveCreatureTo(world.creatures[3], world.creatures[3].coordinate.move(Direction.DOWN))
                 }
                 sleep(100)
             }

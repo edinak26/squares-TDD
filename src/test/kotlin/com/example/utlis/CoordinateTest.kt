@@ -3,7 +3,7 @@ package com.example.utlis
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-internal class CoordinateTest {
+internal class GridTest {
 
     @Test
     fun shouldReturnValueFromGridByCoordinate() {

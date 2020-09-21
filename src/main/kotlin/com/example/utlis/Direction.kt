@@ -1,5 +1,7 @@
 package com.example.utlis
 
+import com.example.utlis.Coordinate.Companion.coordinateOf
+
 enum class Direction(val rowIncrement: Int, val columnIncrement: Int) {
     UP(-1, 0),
     DOWN(1, 0),
@@ -8,6 +10,6 @@ enum class Direction(val rowIncrement: Int, val columnIncrement: Int) {
 
     companion object {
         fun Coordinate.move(direction: Direction) =
-            Coordinate(row + direction.rowIncrement, column + direction.columnIncrement)
+            coordinateOf(row + direction.rowIncrement, column + direction.columnIncrement)
     }
 }
