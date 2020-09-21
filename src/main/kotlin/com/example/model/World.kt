@@ -26,8 +26,10 @@ class World {
     }
 
     fun moveCreatureTo(creature: Creature, coordinate: Coordinate): Boolean {
-        if(creaturesGrid[creature.coordinate] != creature) return false
-        if(creaturesGrid[coordinate]!= null) return false
+        if (creaturesGrid[creature.coordinate] != creature) return false
+        if (creaturesGrid[coordinate] != null) return false
+        creaturesGrid[creature.coordinate] = null
+        creaturesGrid[coordinate] = creature
         creature.coordinate = coordinate
         return true
     }

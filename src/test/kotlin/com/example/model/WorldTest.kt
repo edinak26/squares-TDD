@@ -105,4 +105,22 @@ internal class WorldTest {
         assertEquals(false, world.moveCreatureTo(creature, Coordinate(1, 1)))
     }
 
+    @Test
+    fun shouldClearCellAfterMoving() {
+        val creature = creatureFactory.creatureBy(defaultCoordinate)
+        world.addCreature(creature)
+        world.moveCreatureTo(creature, Coordinate(1, 1))
+
+        assertEquals(true, world.addCreature(creatureFactory.creatureBy(defaultCoordinate)))
+    }
+
+    @Test
+    fun shouldShouldNotAddCreatureWhenCellTakenByMoving() {
+        val creature = creatureFactory.creatureBy(defaultCoordinate)
+        world.addCreature(creature)
+        world.moveCreatureTo(creature, Coordinate(1, 1))
+
+        assertEquals(false, world.addCreature(creatureFactory.creatureBy(Coordinate(1, 1))))
+    }
+
 }
