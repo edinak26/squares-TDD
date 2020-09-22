@@ -1,6 +1,7 @@
 package com.example.model
 
 import com.example.utlis.Coordinate
+import com.example.utlis.Coordinate.Companion.coordinateOf
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -121,6 +122,44 @@ internal class WorldTest {
         world.moveCreatureTo(creature, Coordinate(1, 1))
 
         assertEquals(false, world.addCreature(creatureFactory.creatureBy(Coordinate(1, 1))))
+    }
+
+    @Test
+    fun shouldEatCreature() {
+        val creature = creatureFactory.creatureBy(defaultCoordinate)
+        world.addCreature(creature)
+        world.addCreature(creatureFactory.creatureBy(Coordinate(1, 1)))
+
+        world.eatIn(creature, Coordinate(1, 1))
+
+        assertEquals(listOf(creature), world.creatures)
+    }
+
+    @Test
+    fun shouldAddCreatureOnEatenCellCoordinate() {
+        val creature = creatureFactory.creatureBy(defaultCoordinate)
+        world.addCreature(creature)
+        world.addCreature(creatureFactory.creatureBy(Coordinate(1, 1)))
+
+        world.eatIn(creature, Coordinate(1, 1))
+
+        assertEquals(true, world.addCreature(creatureFactory.creatureBy(Coordinate(1, 1))))
+    }
+
+    @Test
+    fun shouldGiveEnergyFromEatenCreature() {
+        val creature = creatureFactory.creatureBy(defaultCoordinate).apply {
+            energy = 13.0
+            eatingEffectivity = 0.2
+        }
+        world.addCreature(creature)
+        world.addCreature(creatureFactory.creatureIn(1, 1).apply {
+            energy = 25.0
+        })
+
+        world.eatIn(creature, coordinateOf(1, 1))
+
+        assertEquals(18.0, creature.energy)
     }
 
 }

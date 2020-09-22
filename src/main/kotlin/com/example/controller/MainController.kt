@@ -34,21 +34,27 @@ class MainController : Controller() {
         runAsync {
             val world = World()
             val creaturesFactory = CreatureFactory()
-            world.addCreature(creaturesFactory.creatureBy(coordinateOf(50, 50)))
-            world.addCreature(creaturesFactory.creatureBy(coordinateOf(51, 50)))
-            world.addCreature(creaturesFactory.creatureBy(coordinateOf(50, 51)))
-            world.addCreature(creaturesFactory.creatureBy(coordinateOf(51, 51)))
+            for (row in 0 until WORLD_GRID_ROWS_SIZE) {
+                for (column in 0 until WORLD_GRID_COLUMNS_SIZE) {
+                    if (row != 50 || column != 50)
+                        world.addCreature(creaturesFactory.creatureIn(row, column))
+                }
+            }
+            val eater = creaturesFactory.creatureIn(50, 50)
+            eater.color = Color(1.0, 0.0, 0.0, 1.0)
+            world.addCreature(eater)
             while (true) {
                 runLater {
                     clearCreature()
                     drawCreatures(world.creatures)
-
-                    world.moveCreatureTo(world.creatures[0], world.creatures[0].coordinate.move(Direction.UP))
-                    world.moveCreatureTo(world.creatures[1], world.creatures[1].coordinate.move(Direction.RIGHT))
-                    world.moveCreatureTo(world.creatures[2], world.creatures[2].coordinate.move(Direction.LEFT))
-                    world.moveCreatureTo(world.creatures[3], world.creatures[3].coordinate.move(Direction.DOWN))
+                    val newCoordinate = eater.coordinate.move(Direction.values().random())
+                    world.eatIn(eater, newCoordinate)
+                    world.moveCreatureTo(eater, newCoordinate)
+                    world.creatures.forEach {
+                        if(it != eater) world.moveCreatureTo(it,it.coordinate.move(Direction.DOWN))
+                    }
                 }
-                sleep(100)
+                sleep(200)
             }
         }
     }

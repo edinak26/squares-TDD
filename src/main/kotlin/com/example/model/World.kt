@@ -34,5 +34,13 @@ class World {
         return true
     }
 
+    fun eatIn(creature: Creature, coordinate: Coordinate) {
+        creaturesGrid[coordinate]?.let {
+            creatures.remove(it)
+            creaturesGrid[coordinate] = null
+            creature.energy += it.energy * creature.eatingEffectivity
+        }
+    }
+
 
 }
