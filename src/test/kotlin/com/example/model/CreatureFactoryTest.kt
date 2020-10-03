@@ -12,7 +12,7 @@ internal class CreatureFactoryTest {
 
     @BeforeEach
     fun setup(){
-        creatureFactory = CreatureFactory()
+        creatureFactory = CreatureFactory(World())
     }
 
     @Test

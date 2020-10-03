@@ -1,5 +1,6 @@
 package com.example.model
 
+import com.example.controller.BASE_CHARGE_AMOUNT
 import com.example.utlis.Coordinate
 import com.example.utlis.Coordinate.Companion.coordinateOf
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -16,7 +17,7 @@ internal class WorldTest {
     @BeforeEach
     fun setup() {
         world = World()
-        creatureFactory = Creature.CreatureFactory()
+        creatureFactory = Creature.CreatureFactory(world)
     }
 
     @Test
@@ -130,9 +131,10 @@ internal class WorldTest {
         world.addCreature(creature)
         world.addCreature(creatureFactory.creatureBy(Coordinate(1, 1)))
 
-        world.eatIn(creature, Coordinate(1, 1))
+        val returnValue = world.eatIn(creature, Coordinate(1, 1))
 
         assertEquals(listOf(creature), world.creatures)
+        assertEquals(true, returnValue)
     }
 
     @Test
@@ -157,9 +159,45 @@ internal class WorldTest {
             energy = 25.0
         })
 
-        world.eatIn(creature, coordinateOf(1, 1))
+        val returnValue = world.eatIn(creature, coordinateOf(1, 1))
 
         assertEquals(18.0, creature.energy)
+        assertEquals(true, returnValue)
     }
 
+
+    @Test
+    fun shouldNotEatWhenCreatureIsUnknown() {
+        val creature = creatureFactory.creatureBy(defaultCoordinate)
+        val eatedCreature = creatureFactory.creatureIn(1, 1)
+        world.addCreature(eatedCreature)
+
+        val returnValue = world.eatIn(creature, Coordinate(1, 1))
+
+        assertEquals(listOf(eatedCreature), world.creatures)
+        assertEquals(false, returnValue)
+    }
+
+    @Test
+    fun shouldChargeCreature() {
+        val creature = creatureFactory.creatureBy(defaultCoordinate)
+        creature.energy = 8.0
+        creature.chargeEffectivity = 0.3
+
+        world.addCreature(creature)
+        world.chargeCreature(creature)
+
+        assertEquals(8.0 + BASE_CHARGE_AMOUNT * 0.3, creature.energy)
+    }
+
+    @Test
+    fun shouldNotChargeUnknownCreature() {
+        val creature = creatureFactory.creatureBy(defaultCoordinate)
+        creature.energy = 8.0
+        creature.chargeEffectivity = 0.3
+
+        world.chargeCreature(creature)
+
+        assertEquals(8.0, creature.energy)
+    }
 }

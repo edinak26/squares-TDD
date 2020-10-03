@@ -1,12 +1,10 @@
 package com.example.controller
 
+import com.example.model.CreatureBrain
 import com.example.model.Creature
 import com.example.model.Creature.CreatureFactory
+import com.example.model.CreatureAction
 import com.example.model.World
-import com.example.utlis.Coordinate
-import com.example.utlis.Coordinate.Companion.coordinateOf
-import com.example.utlis.Direction
-import com.example.utlis.Direction.Companion.move
 import com.example.utlis.Grid
 import com.example.utlis.get
 import javafx.beans.property.SimpleObjectProperty
@@ -15,10 +13,10 @@ import tornadofx.Controller
 import tornadofx.runLater
 import tornadofx.toProperty
 import java.lang.Thread.sleep
-import kotlin.random.Random
 
 val WORLD_GRID_ROWS_SIZE = 100
 val WORLD_GRID_COLUMNS_SIZE = 100
+val BASE_CHARGE_AMOUNT = 10
 
 class MainController : Controller() {
     val BACKGROUND_COLOR = Color(0.0, 0.0, 0.0, 1.0)
@@ -33,28 +31,21 @@ class MainController : Controller() {
     init {
         runAsync {
             val world = World()
-            val creaturesFactory = CreatureFactory()
-            for (row in 0 until WORLD_GRID_ROWS_SIZE) {
-                for (column in 0 until WORLD_GRID_COLUMNS_SIZE) {
-                    if (row != 50 || column != 50)
-                        world.addCreature(creaturesFactory.creatureIn(row, column))
-                }
-            }
-            val eater = creaturesFactory.creatureIn(50, 50)
-            eater.color = Color(1.0, 0.0, 0.0, 1.0)
-            world.addCreature(eater)
+            val creaturesFactory = CreatureFactory(world)
+            val a = creaturesFactory.creatureIn(50, 50)
+            a.brain = CreatureBrain(Array(50) { CreatureAction.values.random() })
+            a.color = Color(0.9, 0.1, 0.1, 1.0)
+            world.addCreature(a)
             while (true) {
                 runLater {
                     clearCreature()
                     drawCreatures(world.creatures)
-                    val newCoordinate = eater.coordinate.move(Direction.values().random())
-                    world.eatIn(eater, newCoordinate)
-                    world.moveCreatureTo(eater, newCoordinate)
-                    world.creatures.forEach {
-                        if(it != eater) world.moveCreatureTo(it,it.coordinate.move(Direction.DOWN))
+                    repeat(4){
+                        ArrayList(world.creatures).forEach { it.runCycle() }
+
                     }
                 }
-                sleep(200)
+                sleep(2 + world.creatures.size/1000L)
             }
         }
     }

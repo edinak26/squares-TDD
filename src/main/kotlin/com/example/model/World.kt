@@ -1,5 +1,6 @@
 package com.example.model
 
+import com.example.controller.BASE_CHARGE_AMOUNT
 import com.example.controller.WORLD_GRID_COLUMNS_SIZE
 import com.example.controller.WORLD_GRID_ROWS_SIZE
 import com.example.utlis.Coordinate
@@ -34,12 +35,19 @@ class World {
         return true
     }
 
-    fun eatIn(creature: Creature, coordinate: Coordinate) {
-        creaturesGrid[coordinate]?.let {
+    fun eatIn(creature: Creature, coordinate: Coordinate): Boolean {
+        if (creaturesGrid[creature.coordinate] != creature) return false
+        return creaturesGrid[coordinate]?.let {
             creatures.remove(it)
             creaturesGrid[coordinate] = null
             creature.energy += it.energy * creature.eatingEffectivity
-        }
+            true
+        } ?: false
+    }
+
+    fun chargeCreature(creature: Creature) {
+        if (creaturesGrid[creature.coordinate] != creature) return
+        creature.energy += creature.chargeEffectivity * BASE_CHARGE_AMOUNT
     }
 
 
